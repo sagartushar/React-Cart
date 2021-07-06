@@ -1,11 +1,11 @@
 import React from 'react';
 const CartItem = (props)=>{
     const {price , qty , title} = props.product;
- 
+   
         return(
             <div className = 'cart-item'>
                 <div className="left-block">
-                  <img style= {styles.image}></img>
+                  <img style= {styles.image} src={props.product.img}></img>
                    
                 </div>
                 <div className="right-block">

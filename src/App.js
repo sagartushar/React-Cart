@@ -2,36 +2,36 @@ import './index.css';
 import Cart from './Cart'; 
 import Navbar from './Navbar';
 import React from 'react';
+import firebase from 'firebase/app'
+import "firebase/firestore";
 class  App extends React.Component {
   constructor(){
     super();
     this.state = {
-     products :[
-            {
-                price : 94599,
-                qty : 1,
-                title: "Laptop",
-                img : '',
-                id:1
-            },
-            {
-                price : 999,
-                qty : 1,
-                title: "Mobile",
-                img : '',
-                id:2
-            },
-            {
-                price : 999,
-                qty : 1,
-                title: "bile",
-                img : '',
-                id: 3
-            },
-        ]
+     products :[],
+     loading : "true",
 
     }
  
+}
+componentDidMount(){
+  firebase
+    .firestore()
+    .collection('products')
+    .get()
+    .then((snapshot)=>{
+      
+      const products =  snapshot.docs.map((doc)=>{
+        const data = doc.data();
+        console.log(data);
+        data['id'] = doc.id;
+        return data;
+      });
+      this.setState({
+        products,
+        loading : false
+      })
+    })
 }
 increaseQuantity=(product)=>{
     product.qty++;
@@ -49,7 +49,7 @@ decreaseQuantity=(product)=>{
     
 }
 deleteProduct=(product)=>{
-    console.log(product);
+
     const {products} = this.state;
     const index = products.indexOf(product);
     products.splice(index,1);
@@ -59,7 +59,7 @@ deleteProduct=(product)=>{
 }  
 
 countNumberofProducts=()=>{
-  console.log(this.state.products);
+  
   const {products} = this.state;
   var count = 0;
   products.map((product)=>{
@@ -68,13 +68,31 @@ countNumberofProducts=()=>{
   })
   return count;
 }
+getTotal =()=>{
+  const {products} = this.state;
+  var amount = 0;
+  products.map((product)=>{
+    amount += product.qty * product.price;
+    return product;
+  });
+  return amount;
+}
   render(){
     const {products} = this.state;
+   
     return (
       <div className="App">
         <Navbar count ={this.countNumberofProducts()}/>
-        <Cart products = {products} deleteProduct = {this.deleteProduct} increaseQuantity ={ this.increaseQuantity} decreaseQuantity = {this.decreaseQuantity} />
-      </div>
+        <Cart products = {products} 
+              deleteProduct = {this.deleteProduct} 
+              increaseQuantity ={ this.increaseQuantity} 
+              decreaseQuantity = {this.decreaseQuantity} 
+              />
+        {this.state.loading && <h1> Loading Products .. </h1>}
+        <div className= "Total" style = {{margin:'45px'}}>
+          Total : {this.getTotal()}
+        </div>
+     </div>
     )
   }
 };
