@@ -7,7 +7,7 @@ const Navbar = (props) =>{
                 <span style={styles.num}>{props.count}</span>
                     <img alt ="cart" 
                                 className="action-icons" 
-                                src="https://img-premium.flaticon.com/png/512/3002/premium/3002240.png?token=exp=1625467900~hmac=0ca53a23beb1fb55aae385631945813d"
+                                src="https://img-premium.flaticon.com/png/512/2838/premium/2838838.png?token=exp=1625631403~hmac=bd6b1be922f3fe19c77e7c9e1ea286ea"
                     ></img>
                         
                 </div>
